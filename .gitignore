@@ -1,0 +1,24 @@
+### Go template
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+app
+go-cp
+go-envdir
+go-telnet
+
+# Test binary, build with `go test -c`
+*.test
+
+### User defined
+.idea/
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.vscode/
+*.bak
