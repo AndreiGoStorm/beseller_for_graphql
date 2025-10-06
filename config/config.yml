@@ -1,6 +1,0 @@
-app:
-  name: 'beseller'
-  appUrl: 'https://demo.beseller.com'
-  apiUrl: 'graphql?token=c2b05afc61b8d243e0c10b46a677cbf4eb98d09c'
-  imageUrl: 'pics/items'
-  file: "data.yml"

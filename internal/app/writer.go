@@ -12,7 +12,7 @@ type Writer struct {
 }
 
 type Catalog struct {
-	XMLName xml.Name `xml:"catalog"`
+	XMLName xml.Name `xml:"yml_catalog"`
 	Date    string   `xml:"date,attr"`
 	Shop    Shop     `xml:"shop"`
 }
@@ -28,13 +28,14 @@ type Categories struct {
 }
 
 type Category struct {
-	ID       int    `xml:"id,attr"`
-	ParentID int    `xml:"parentId,attr,omitempty"`
-	Name     string `xml:",chardata"`
+	XMLName  xml.Name `xml:"category"`
+	ID       int      `xml:"id,attr"`
+	ParentID int      `xml:"parentId,attr,omitempty"`
+	Name     string   `xml:",chardata"`
 }
 
 type Offers struct {
-	Products []Product `xml:"offers"`
+	Products []Product `xml:"offer"`
 }
 
 type Product struct {
@@ -60,69 +61,65 @@ func NewWriter(fileName string) (w *Writer, err error) {
 }
 
 func (w *Writer) write(categories []Category, products []Product) (err error) {
-	encoder := xml.NewEncoder(w.file)
-	encoder.Indent("", "  ")
+	enc := xml.NewEncoder(w.file)
+	enc.Indent("", "  ")
 	_, err = w.file.WriteString(xml.Header)
 	if err != nil {
 		return err
 	}
 
 	yml := xml.StartElement{
-		Name: xml.Name{Local: "catalog"},
+		Name: xml.Name{Local: "yml_catalog"},
 		Attr: []xml.Attr{
 			{Name: xml.Name{Local: "date"}, Value: time.Now().Format("2006-01-02 15:04")},
 		},
 	}
-	if err = encoder.EncodeToken(yml); err != nil {
+	if err = enc.EncodeToken(yml); err != nil {
 		return err
 	}
 
-	if err = encoder.EncodeToken(xml.StartElement{Name: xml.Name{Local: "shop"}}); err != nil {
+	if err = enc.EncodeToken(xml.StartElement{Name: xml.Name{Local: "shop"}}); err != nil {
 		return err
 	}
 
-	if err = encoder.EncodeToken(xml.StartElement{Name: xml.Name{Local: "categories"}}); err != nil {
+	if err = enc.EncodeToken(xml.StartElement{Name: xml.Name{Local: "categories"}}); err != nil {
 		return err
 	}
-	for _, role := range categories {
-		if err = encoder.Encode(role); err != nil {
+	for _, c := range categories {
+		if err = enc.Encode(c); err != nil {
 			return err
 		}
 	}
-	if err = encoder.EncodeToken(xml.EndElement{Name: xml.Name{Local: "categories"}}); err != nil {
+	if err = enc.EncodeToken(xml.EndElement{Name: xml.Name{Local: "categories"}}); err != nil {
 		return err
 	}
 
-	if err = encoder.EncodeToken(xml.StartElement{Name: xml.Name{Local: "offers"}}); err != nil {
+	if err = enc.EncodeToken(xml.StartElement{Name: xml.Name{Local: "offers"}}); err != nil {
 		return err
 	}
 
 	for _, p := range products {
-		if err = encoder.EncodeToken(xml.Comment(" " + p.CategoryName + " ")); err != nil {
+		if err = enc.EncodeToken(xml.Comment(" " + p.CategoryName + " ")); err != nil {
 			return err
 		}
 
-		if err = encoder.Encode(p); err != nil {
+		if err = enc.Encode(p); err != nil {
 			return err
 		}
 	}
 
-	if err = encoder.EncodeToken(xml.EndElement{Name: xml.Name{Local: "offers"}}); err != nil {
+	if err = enc.EncodeToken(xml.EndElement{Name: xml.Name{Local: "offers"}}); err != nil {
 		return err
 	}
 
-	if err = encoder.EncodeToken(xml.EndElement{Name: xml.Name{Local: "shop"}}); err != nil {
+	if err = enc.EncodeToken(xml.EndElement{Name: xml.Name{Local: "shop"}}); err != nil {
 		return err
 	}
-	if err = encoder.EncodeToken(xml.EndElement{Name: xml.Name{Local: "catalog"}}); err != nil {
-		return err
-	}
-
-	if err = encoder.Flush(); err != nil {
+	if err = enc.EncodeToken(xml.EndElement{Name: xml.Name{Local: "yml_catalog"}}); err != nil {
 		return err
 	}
 
-	return nil
+	return enc.Flush()
 }
 
 func (w *Writer) close() error {

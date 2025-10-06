@@ -1,0 +1,5 @@
+app:
+  appUrl: 'https://demo.beseller.com'
+  apiUrl: ''
+  imageUrl: 'pics/items'
+  file: "export.yml"

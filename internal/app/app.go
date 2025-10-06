@@ -6,19 +6,18 @@ import (
 )
 
 type App struct {
-	name string
-	file string
+	File string
 	conf *config.Config
 
-	req    *Request
-	writer *Writer
+	req *Request
+	wr  *Writer
 
 	categories []Category
 	products   []Product
 }
 
 func NewApp(conf *config.Config) *App {
-	a := &App{name: conf.Name, file: conf.File, conf: conf}
+	a := &App{File: conf.File, conf: conf}
 	a.req = NewRequest(conf.AppURL, conf.APIURL)
 	return a
 }
@@ -62,12 +61,12 @@ func (a *App) handleProducts(products []GraphProduct) {
 }
 
 func (a *App) Write() (err error) {
-	a.writer, err = NewWriter(a.file)
+	a.wr, err = NewWriter(a.File)
 	if err != nil {
 		return err
 	}
 
-	err = a.writer.write(a.categories, a.products)
+	err = a.wr.write(a.categories, a.products)
 	if err != nil {
 		return err
 	}
@@ -76,5 +75,5 @@ func (a *App) Write() (err error) {
 }
 
 func (a *App) Close() error {
-	return a.writer.close()
+	return a.wr.close()
 }

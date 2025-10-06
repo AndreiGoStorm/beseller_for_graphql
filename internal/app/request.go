@@ -12,8 +12,9 @@ import (
 )
 
 type Request struct {
-	url     string
-	timeout time.Duration
+	url         string
+	contentType string
+	timeout     time.Duration
 }
 
 type QueryRequest struct {
@@ -21,7 +22,7 @@ type QueryRequest struct {
 }
 
 func NewRequest(appURL, apiURL string) *Request {
-	return &Request{helpers.JoinURL(appURL, apiURL), 10 * time.Second}
+	return &Request{helpers.JoinURL(appURL, apiURL), "application/json", 10 * time.Second}
 }
 
 func (r *Request) do() (qr *QueryResponse, err error) {
@@ -37,7 +38,7 @@ func (r *Request) do() (qr *QueryResponse, err error) {
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Type", r.contentType)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)

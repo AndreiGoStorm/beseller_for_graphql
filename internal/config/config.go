@@ -13,7 +13,6 @@ type (
 	}
 
 	App struct {
-		Name     string `env-required:"true" yaml:"name"`
 		AppURL   string `env-required:"true" yaml:"appUrl"`
 		APIURL   string `env-required:"true" yaml:"apiUrl"`
 		ImageURL string `env-required:"true" yaml:"imageUrl"`

@@ -1,10 +1,11 @@
 package app
 
 import (
-	"reflect"
 	"testing"
 
 	"beseller/internal/config"
+	"beseller/internal/helpers"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestHandleCategories(t *testing.T) {
@@ -105,9 +106,7 @@ func TestHandleCategories(t *testing.T) {
 
 			app.handleCategories(tt.input)
 
-			if !reflect.DeepEqual(tt.expected, app.categories) {
-				t.Errorf("expected: %+v, actual: %+v", tt.expected, app.categories)
-			}
+			assert.Equal(t, tt.expected, app.categories, "categories should match")
 		})
 	}
 }
@@ -193,25 +192,14 @@ func TestHandleProducts(t *testing.T) {
 		},
 	}
 
-	conf := NewTestConfig()
+	conf := helpers.NewTestConfig()
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			app := NewApp(conf)
 
 			app.handleProducts(tt.input)
 
-			if !reflect.DeepEqual(tt.expected, app.products) {
-				t.Errorf("expected: %+v, actual: %+v", tt.expected, app.products)
-			}
+			assert.Equal(t, tt.expected, app.products, "products should match")
 		})
-	}
-}
-
-func NewTestConfig() *config.Config {
-	return &config.Config{
-		App: config.App{
-			AppURL:   "http://app.com/",
-			ImageURL: "pics/items",
-		},
 	}
 }

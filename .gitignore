@@ -6,6 +6,8 @@
 *.so
 *.dylib
 app
+config.yml
+export.yml
 go-cp
 go-envdir
 go-telnet

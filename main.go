@@ -21,19 +21,19 @@ func main() {
 
 	err := application.DoRequest()
 	if err != nil {
-		fmt.Println("Ошибка выполнения запроса:", err)
+		fmt.Println("Error executing request:", err)
 		os.Exit(1)
 	}
 	err = application.Write()
 	if err != nil {
-		fmt.Println("Ошибка записи:", err)
+		fmt.Println("Error writing file:", err)
 		os.Exit(1)
 	}
 	err = application.Close()
 	if err != nil {
-		fmt.Println("Ошибка закрытия файла:", err)
+		fmt.Println("Error closing file:", err)
 		os.Exit(1)
 	}
 
-	fmt.Printf("file written successfully %s\n", "Ratio % ")
+	fmt.Printf("File written successfully - %s\n", application.File)
 }
